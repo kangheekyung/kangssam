@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>강쌤과 함께 하는 컴퓨터교실</title>
+    <title>마루와 키루의 컴퓨터 놀이터</title>
     <style>
         /* 기본 설정 */
         * {
@@ -20,7 +20,7 @@
             background-color: #fffaf0;
         }
 
-        /* 전체 레이아웃 (상단 15%, 하단 85%) */
+        /* 전체 레이아웃 (상단 18%, 하단 82%) */
         .container {
             display: flex;
             flex-direction: column;
@@ -28,45 +28,40 @@
             height: 100%;
         }
 
-        /* 상단 영역 (15%) */
+        /* 💡 1. 상단 타이틀 영역 (이미지만 깔끔하게 표시) */
         header {
-            height: 15%;
-            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
-            color: #2d3748;
+            height: 65%; /* 상단 영역 중 위쪽 공간 */
+            background-color: #fffaf0;
+            background-image: url('img/top.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain; 
+            width: 100%;
+        }
+
+        /* 💡 2. 메뉴 버튼 전용 영역 (배경을 넣어 버튼을 확실히 구분) */
+        nav {
+            height: 35%; /* 상단 영역 중 아래쪽 공간 */
+            background-color: #d8f3dc; /* 눈에 잘 띄는 연한 민트/초록 계열 배경 */
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 8px 20px;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        /* 타이틀 */
-        header h1 {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #2c5282;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
-        }
-
-        /* 상단 메뉴바 */
-        nav {
-            display: flex;
-            gap: 10px;
+            gap: 12px;
+            border-bottom: 2px solid #b7e4c7;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
         }
 
         /* 메뉴 버튼 스타일 */
         .menu-btn {
             background-color: #ffffff;
-            color: #4a5568;
-            border: 2px solid #cbd5e0;
-            padding: 6px 16px;
-            font-size: 1.05rem;
+            color: #2d3748;
+            border: 2px solid #95d5b2;
+            padding: 6px 18px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease-in-out;
         }
 
@@ -86,9 +81,9 @@
             transform: scale(0.95);
         }
 
-        /* 하단 영역 (85%) */
+        /* 하단 영역 */
         main {
-            height: 85%;
+            height: 82%;
             display: flex;
             flex-direction: column;
             background-color: #fffaf0;
@@ -103,7 +98,7 @@
             overflow-y: auto;
         }
 
-        /* 제작자 정보 영역 (페이지 제일 아래) */
+        /* 제작자 정보 영역 */
         footer {
             height: 35px;
             background-color: #f7fafc;
@@ -120,9 +115,12 @@
 <body>
 
     <div class="container">
-        <!-- 상단 영역 (15%) -->
-        <header>
-            <h1>🌟 강쌤과 함께 하는 컴퓨터교실 🌟</h1>
+        <!-- 상단 전체 영역 -->
+        <div style="height: 18%; display: flex; flex-direction: column;">
+            <!-- 1. 타이틀 이미지 영역 -->
+            <header></header>
+            
+            <!-- 2. 메뉴 버튼 영역 -->
             <nav>
                 <button class="menu-btn" onclick="loadPage('mouse_pointer.html', this)">마우스 포인터</button>
                 <button class="menu-btn" onclick="loadPage('click.html', this)">클릭</button>
@@ -131,9 +129,9 @@
                 <button class="menu-btn active" onclick="loadPage('keyboard.html', this)">키보드</button>
                 <button class="menu-btn" onclick="loadPage('computer_bingo.html', this)">즐기기</button>
             </nav>
-        </header>
+        </div>
 
-        <!-- 하단 영역 (85%) -->
+        <!-- 하단 영역 -->
         <main>
             <iframe id="content-frame" src="keyboard.html" name="subcontent"></iframe>
 
@@ -144,16 +142,10 @@
     </div>
 
     <script>
-        // 메뉴 클릭 시 하단 영역에 해당 페이지를 연결하고 버튼 활성화 상태를 관리하는 함수
         function loadPage(pageUrl, buttonElement) {
-            // 1. 하단 프레임(iframe)에 링크 연결
             document.getElementById('content-frame').src = pageUrl;
-
-            // 2. 모든 메뉴 버튼의 active 클래스 제거
             const buttons = document.querySelectorAll('.menu-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
-
-            // 3. 클릭한 버튼에만 active 클래스 추가하여 색상 유지
             buttonElement.classList.add('active');
         }
     </script>
