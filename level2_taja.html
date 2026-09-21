@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>2단계: 윗줄+가운데자리</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Jalnan', 'BM JUA', '맑은 고딕', sans-serif;
+			background-color: #fcf6f5; /* 부드러운 크림 파스텔톤 배경 */
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		header {
+			width: 100%;
+			max-width: 800px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #ffecb6; /* 파스텔 노란색 */
+			padding: 15px 30px;
+			border-radius: 20px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+			margin-bottom: 20px;
+		}
+
+		h1 {
+			margin: 0;
+			font-size: 28px;
+			color: #5d534a;
+		}
+
+		.score-board {
+			font-size: 28px;
+			color: #e07a5f; /* 파스텔 코랄 레드 */
+			font-weight: bold;
+		}
+
+		.tab-container {
+			display: flex;
+			gap: 15px;
+			margin-bottom: 20px;
+			width: 100%;
+			max-width: 800px;
+		}
+
+		.tab-btn {
+			flex: 1;
+			padding: 15px;
+			font-size: 24px;
+			font-weight: bold;
+			border: none;
+			border-radius: 15px;
+			background-color: #e3d5ca; /* 차분한 파스텔 회베이지 */
+			color: #7f6f65;
+			cursor: pointer;
+			transition: 0.2s;
+		}
+
+		.tab-btn.active {
+			background-color: #84a98c; /* 파스텔 민트 그린 */
+			color: white;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+		}
+
+		.content-container {
+			width: 100%;
+			max-width: 800px;
+			background: #ffffff;
+			padding: 30px;
+			border-radius: 20px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+			display: none;
+            max-height: 500px;
+            overflow-y: auto;
+		}
+
+		.content-container.active {
+			display: block;
+		}
+
+		.word-row {
+			display: flex;
+			align-items: center;
+			margin-bottom: 15px;
+			background: #f7f4f2; /* 연한 파스텔 배경 박스 */
+			padding: 12px 20px;
+			border-radius: 15px;
+			border: 2px solid #eae0d0;
+		}
+
+		.word-label {
+			font-size: 26px;
+			font-weight: bold;
+			width: 240px;
+			color: #4a403a;
+		}
+
+		.word-input {
+			font-size: 26px;
+			padding: 8px 15px;
+			width: 250px;
+			border: 3px solid #d5bdaf; /* 파스텔 브라운 계열 테두리 */
+			border-radius: 10px;
+			margin-right: 15px;
+			outline: none;
+			background-color: #fff;
+		}
+
+		.word-input:focus {
+			border-color: #a3c4f3; /* 파스텔 하늘색 포커스 테두리 */
+		}
+
+		.submit-btn {
+			font-size: 22px;
+			padding: 8px 20px;
+			background-color: #f4a261; /* 파스텔 오렌지 */
+			color: white;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: bold;
+		}
+
+		.submit-btn:hover {
+			background-color: #e76f51;
+		}
+
+		.submit-btn.success {
+			background-color: #f28482; /* 파스텔 핑크 */
+			font-size: 26px;
+		}
+
+		/* 축하 모달창 스타일 */
+		#modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.3);
+			justify-content: center;
+			align-items: center;
+			z-index: 1000;
+		}
+
+		.modal-content {
+			background: #fffdf9;
+			padding: 40px;
+			border-radius: 25px;
+			text-align: center;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+			max-width: 500px;
+			width: 90%;
+		}
+
+		.modal-content h2 {
+			font-size: 32px;
+			color: #52796f; /* 파스텔 딥그린 */
+			margin-top: 0;
+		}
+
+		.modal-content p {
+			font-size: 22px;
+			color: #6b705c;
+		}
+
+		.modal-btns {
+			display: flex;
+			gap: 15px;
+			justify-content: center;
+			margin-top: 30px;
+		}
+
+		.modal-btn {
+			font-size: 22px;
+			font-weight: bold;
+			padding: 12px 25px;
+			border: none;
+			border-radius: 15px;
+			cursor: pointer;
+		}
+
+		.btn-restart {
+			background-color: #84a98c; /* 파스텔 민트 그린 */
+			color: white;
+		}
+
+		.btn-close {
+			background-color: #b5838d; /* 파스텔 로즈모브 */
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+
+	<header>
+		<h1>⌨️ 2단계: 윗줄+가운데자리</h1>
+		<div class="score-board">점수: <span id="total-score">0</span>점</div>
+	</header>
+
+	<div class="tab-container">
+		<button class="tab-btn active" onclick="switchTab(0)">두 글자</button>
+		<button class="tab-btn" onclick="switchTab(1)">세 글자</button>
+		<button class="tab-btn" onclick="switchTab(2)">받침</button>
+	</div>
+
+	<!-- 1. 두 글자 탭 -->
+	<div id="tab-0" class="content-container active"></div>
+
+	<!-- 2. 세 글자 탭 -->
+	<div id="tab-1" class="content-container"></div>
+
+	<!-- 3. 받침 탭 -->
+	<div id="tab-2" class="content-container"></div>
+
+	<!-- 완료 축하 모달창 -->
+	<div id="modal">
+		<div class="modal-content">
+			<h2>🎉 2단계 완료! 🎉</h2>
+			<p>윗줄과 가운데자리 연습을 모두 마쳤습니다!</p>
+			<div class="modal-btns">
+				<button class="modal-btn btn-restart" onclick="restartApp()">한 번 더</button>
+				<button class="modal-btn btn-close" onclick="closeModal()">종료</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// 단어 데이터 정의 (화면에 표시할 텍스트에 왕관을 글자 오른쪽에 배치)
+        const wordData = [
+            // 두 글자 탭
+            { tab: 0, word: "바지", emoji: "👖", score: 10, checkWord: "바지" },
+            { tab: 0, word: "사자", emoji: "🦁", score: 10, checkWord: "사자" },
+            { tab: 0, word: "도시", emoji: "🏙️", score: 10, checkWord: "도시" },
+            { tab: 0, word: "가지", emoji: "🍆", score: 10, checkWord: "가지" },
+            { tab: 0, word: "고기", emoji: "🥩", score: 10, checkWord: "고기" },
+            { tab: 0, word: "다시", emoji: "🔄", score: 10, checkWord: "다시" },
+            { tab: 0, word: "가기", emoji: "🚶", score: 10, checkWord: "가기" },
+            { tab: 0, word: "사과 👑", emoji: "🍎", score: 50, checkWord: "사과" }, // 글자 오른쪽 왕관, 50점
+
+            // 세 글자 탭
+            { tab: 1, word: "바가지", emoji: "🥣", score: 20, checkWord: "바가지" },
+            { tab: 1, word: "소시지", emoji: "🌭", score: 20, checkWord: "소시지" },
+            { tab: 1, word: "다지기", emoji: "🔪", score: 20, checkWord: "다지기" },
+
+            // 받침 탭
+            { tab: 2, word: "밥", emoji: "🍚", score: 30, checkWord: "밥" },
+            { tab: 2, word: "국", emoji: "🍲", score: 30, checkWord: "국" },
+            { tab: 2, word: "갑", emoji: "📦", score: 30, checkWord: "갑" },
+            { tab: 2, word: "갓", emoji: "👒", score: 30, checkWord: "갓" },
+            { tab: 2, word: "값 👑", emoji: "💰", score: 50, checkWord: "값" } // 글자 오른쪽 왕관, 50점
+        ];
+
+        let totalScore = 0;
+
+        // 화면에 단어 입력 폼 생성하기
+        function initApp() {
+            for (let i = 0; i < 3; i++) {
+                const container = document.getElementById(`tab-${i}`);
+                container.innerHTML = ""; // 초기화
+                const filteredWords = wordData.filter(item => item.tab === i);
+
+                filteredWords.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'word-row';
+                    row.innerHTML = `
+                        <div class="word-label">${item.emoji} ${item.word}</div>
+                        <input type="text" class="word-input" id="input-${i}-${index}" placeholder="여기에 적기">
+                        <button class="submit-btn" id="btn-${i}-${index}" onclick="checkAnswer(${i}, ${index}, '${item.checkWord}', ${item.score})">완료</button>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            switchTab(0);
+            focusFirstInput();
+        }
+
+        // 탭 변경 함수
+        function switchTab(tabIndex) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.content-container');
+
+            tabs.forEach((btn, idx) => {
+                if (idx === tabIndex) {
+                    btn.classList.add('active');
+                    contents[idx].classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                    contents[idx].classList.remove('active');
+                }
+            });
+        }
+
+        // 정답 체크 함수
+        function checkAnswer(tabIdx, itemIdx, targetWord, scoreValue) {
+            const inputField = document.getElementById(`input-${tabIdx}-${itemIdx}`);
+            const submitBtn = document.getElementById(`btn-${tabIdx}-${itemIdx}`);
+            const userText = inputField.value.trim();
+
+            if (userText === targetWord) {
+                // 맞았을 때 점수 누적
+                totalScore += scoreValue;
+                document.getElementById('total-score').innerText = totalScore;
+
+                inputField.disabled = true;
+                submitBtn.innerText = "⭐";
+                submitBtn.classList.add('success');
+                submitBtn.disabled = true;
+
+                focusNextInput(tabIdx, itemIdx);
+            } else {
+                // 틀렸을 때
+                alert("다시 한 번 적어보세요!");
+                inputField.value = "";
+                inputField.focus();
+            }
+        }
+
+        // 첫 번째 입력창 포커스
+        function focusFirstInput() {
+            const firstInput = document.getElementById('input-0-0');
+            if (firstInput) firstInput.focus();
+        }
+
+        // 다음 입력창으로 커서 자동 이동
+        function focusNextInput(tabIdx, itemIdx) {
+            const nextInput = document.getElementById(`input-${tabIdx}-${itemIdx + 1}`);
+            if (nextInput && !nextInput.disabled) {
+                nextInput.focus();
+                return;
+            }
+
+            // 모든 탭을 순회하며 풀지 않은 입력창 탐색
+            let allCompleted = true;
+            for (let t = 0; t < 3; t++) {
+                const filtered = wordData.filter(item => item.tab === t);
+                for (let i = 0; i < filtered.length; i++) {
+                    const targetInput = document.getElementById(`input-${t}-${i}`);
+                    if (targetInput && !targetInput.disabled) {
+                        allCompleted = false;
+                        switchTab(t);
+                        targetInput.focus();
+                        return;
+                    }
+                }
+            }
+
+            // 전부 완료 시 축하 모달창 오픈
+            if (allCompleted) {
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
+
+        // 다시 시작 버튼
+        function restartApp() {
+            document.getElementById('modal').style.display = 'none';
+            initApp();
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        window.onload = initApp;
+	</script>
+</body>
+
+</html>
